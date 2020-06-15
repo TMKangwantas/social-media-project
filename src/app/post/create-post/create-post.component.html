@@ -1,0 +1,16 @@
+<form #createPostForm="ngForm" (ngSubmit)="onSubmit(createPostForm)">
+    <div class="form-group">
+        <label for="post">Create Post</label>
+        <input 
+            placeholder="What's on your mind?"
+            type="text"
+            id="post"
+            class="form-control"
+            ngModel
+            name="post"
+            required>
+    </div>
+    <div>
+        <button class="btn btn-primary" type="submit" [disabled]="post">Create</button>
+    </div>
+</form>

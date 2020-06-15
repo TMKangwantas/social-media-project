@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+          <div class="col-md">
+              <app-create-post></app-create-post>
+          </div>
+          <div 
+            class="col-md"
+            *ngFor="let post of feed; let i = index">
+            <h5>{{post.uid}}</h5>
+            <p>{{post.body}}</p>
+            <div class="row">
+                <div class="col-md-3" (click)="onLike(i)" > <!-- Have to pass and uid  -->
+                    <a href="" onclick="return false">{{post.likes.length}} {{ post.likes.length == 1 ? "Like" : "Likes"}}</a>
+                </div>
+                <div class="col-md-3" (click)="onShowComments()">
+                    <a href="" onclick="return false">{{post.comments.length}} {{ post.comments.length == 1 ? "Comment" : "Comments"}}</a>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            <div class="row" *ngIf="showComments">
+                <div 
+                    class="col-md-8"
+                    *ngFor="let comments of post.comments; let i = index"
+                    >
+                    <h6>{{comments.firstName}} {{ comments.lastName}}</h6>
+                    <p>{{comments.body}}</p>
+                </div>
+                <div class="col-md-8" style="background-color:dimgray;">
+                    <form #commentForm="ngForm" (ngSubmit)="onComment(commentForm, i)">
+                        <div class="form-group">
+                            <input 
+                                type="text"
+                                id="comment"
+                                class="form-control"
+                                ngModel
+                                name="comment"
+                                required
+                                placeholder="Write a comment">
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" type="submit" [disabled]="comment">
+                                Comment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+          </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+  </div>
