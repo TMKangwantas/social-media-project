@@ -3,6 +3,7 @@ import { NgForm, FormGroup, FormControl, Validators, FormArray } from '@angular/
 
 import { PostService } from '../post.service';
 import { Post } from 'src/app/shared/post.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-post',
@@ -13,7 +14,7 @@ export class CreatePostComponent implements OnInit {
   addImages = false;
   createPostForm: FormGroup
 
-  constructor(private postService: PostService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private postService: PostService) { }
 
   ngOnInit() {
     this.initForm();
@@ -31,8 +32,13 @@ export class CreatePostComponent implements OnInit {
     this.postService.addPost(newPost);
 
     console.log(newPost);
+    
+      
+  }
 
-    form.reset();
+  onCancel() {
+    this.createPostForm.reset();
+    (<FormArray>this.createPostForm.get('imagePaths')).clear();
   }
 
   onAddImages() {

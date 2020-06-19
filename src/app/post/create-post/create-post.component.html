@@ -42,5 +42,6 @@
     </div>
     <div>
         <button class="btn btn-primary" type="submit" [disabled]="!createPostForm.valid">Create</button>
+        <button class="btn btn-danger" type="button" (click)="onCancel()">Cancel</button>
     </div>
 </form>
