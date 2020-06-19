@@ -1,4 +1,6 @@
-<form #createPostForm="ngForm" (ngSubmit)="onSubmit(createPostForm)">
+<form 
+    [formGroup]="createPostForm" 
+    (ngSubmit)="onSubmit(createPostForm)">
     <div class="form-group">
         <label for="post">Create Post</label>
         <input 
@@ -6,11 +8,39 @@
             type="text"
             id="post"
             class="form-control"
-            ngModel
-            name="post"
+            formControlName="postBody"
             required>
     </div>
+    <div class="row">
+        <div class="col-xs-12" formArrayName="imagePaths">
+            <div 
+                class="row"
+                *ngFor="let pathCtrl of controls; let i = index"
+                [formGroupName]="i"
+                style="margin-top: 10px">
+                <div class="col-xs-8">
+                    <input 
+                        type="text"
+                        formControlName="imagePath"
+                        class="form-control"
+                        #imagePath>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img [src]="imagePath.value" class="img-responsive" width="200" height="200">
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <button class="btn btn-danger" type="button" (click)="onDeleteImagePath(i)">X</button>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <button class="btn btn-success" type="button" (click)="onAddImages()">Add Images</button>
+            </div>
+        </div>
+    </div>
     <div>
-        <button class="btn btn-primary" type="submit" [disabled]="post">Create</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!createPostForm.valid">Create</button>
     </div>
 </form>

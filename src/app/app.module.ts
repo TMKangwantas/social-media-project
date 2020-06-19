@@ -6,7 +6,7 @@ import { HeaderComponent } from './header/header.component';
 import { PostComponent } from './post/post.component';
 import { CreatePostComponent } from './post/create-post/create-post.component';
 import { PostService } from './post/post.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,7 +17,8 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     PostService

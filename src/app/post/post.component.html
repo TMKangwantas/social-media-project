@@ -10,6 +10,14 @@
             *ngFor="let post of feed; let i = index">
             <h5>{{post.uid}}</h5>
             <p>{{post.body}}</p>
+            <div class="row" *ngIf="post.imagePaths.length !== 0">
+                <div 
+                    class="col-xs-12" 
+                    *ngFor="let path of post.imagePaths; let i = index"
+                    >
+                        <img [src]="path.imagePath" class="img-responsive" width="200" height="200">
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-3" (click)="onLike(i)" > <!-- Have to pass and uid  -->
                     <a href="" onclick="return false">{{post.likes.length}} {{ post.likes.length == 1 ? "Like" : "Likes"}}</a>

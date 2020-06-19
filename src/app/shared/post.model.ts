@@ -4,7 +4,7 @@ export class Post {
     constructor(
         public uid: string,
         public body: string,
-        public imagePath: string[],
+        public imagePaths: string[],
         public likes: string[], //uids, not names
         public comments: Comment[]
     ) {}
