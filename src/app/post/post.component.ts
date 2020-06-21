@@ -1,12 +1,11 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, OnChanges } from '@angular/core';
 
 import { Post } from '../shared/post.model';
 import { PostService } from './post.service';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { Comment } from '../shared/comment.model';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Profile } from '../profile/profile.model';
+import { ActivatedRoute, Router} from '@angular/router';
 import { ProfileService } from '../profile/profile.service';
 
 @Component({
@@ -18,10 +17,10 @@ export class PostComponent implements OnInit, OnDestroy {
   showComments = false;
   subscription: Subscription;
   comment: string;
-  // @Input() uid: string;
   feed: Post[] = [];
 
-  constructor(private postService: PostService, private profileService: ProfileService,  private route: ActivatedRoute) { }
+  constructor(private postService: PostService, private profileService: ProfileService,
+              private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
     this.subscription = this.postService.postsChanged.subscribe(
@@ -29,15 +28,19 @@ export class PostComponent implements OnInit, OnDestroy {
         this.feed = feed;
       }
     );
-    
-    const urlPath = this.route.snapshot.routeConfig.path;
 
-    if (urlPath === "home") {
+    if (this.route.snapshot.routeConfig.path === "home") {
       this.feed = this.postService.getAllPosts();
     }
     else {
-          this.feed = this.postService.getProfilePosts(this.profileService.getUid());
+          this.postService.getProfilePosts(this.profileService.getCurrentUser());
     }
+  }
+
+  onProfileClick(uid: string) {
+    this.profileService.setCurrentUser(uid);
+    this.router.navigate(['../profile', uid], {relativeTo: this.route});
+    this.postService.getProfilePosts(this.profileService.getCurrentUser());
   }
 
   onLike(index: number) {

@@ -9,6 +9,8 @@ export class PostService {
     [
       new Post(
         '123',
+        'Erika',
+        'Jay',
         'Welcome to the social media page!',
         [],
         [
@@ -18,16 +20,36 @@ export class PostService {
         ],
         [
           new Comment(
-            'uid',
+            '321',
             'Lisa',
             'Vander',
             'Thanks for the welcome!'
           ),
           new Comment(
-            'uid',
+            '345',
             'Camille',
             'Graham',
             'Love it, looks wonderful!'
+          )
+        ]
+      ),
+      new Post(
+        '321',
+        'Lisa',
+        'Vander',
+        'Welcome!',
+        [],
+        [
+          'Lisa Vander',
+          'Camille Graham',
+          'Adrienne Mal'
+        ],
+        [
+          new Comment(
+            '345',
+            'Camille',
+            'Graham',
+            'Love it!'
           )
         ]
       )
@@ -38,7 +60,7 @@ export class PostService {
     }
 
     getProfilePosts(uid: string) {
-      return this.feed.filter(p => p.uid === uid);
+        this.postsChanged.next(this.feed.filter(p => p.uid === uid));
     }
 
     addPost(post: Post) {

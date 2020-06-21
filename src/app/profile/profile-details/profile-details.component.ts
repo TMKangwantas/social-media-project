@@ -18,7 +18,8 @@ export class ProfileDetailsComponent implements OnInit {
     this.route.params.subscribe(
       (params: Params) => {
         this.uid = params['uid'];
-        this.profile = this.profileService.getProfile();
+        this.profile = this.profileService.getProfile(this.uid);
+        this.profileService.setCurrentUser(this.uid);
       }
     );
   }

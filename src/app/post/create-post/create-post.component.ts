@@ -5,6 +5,7 @@ import { PostService } from '../post.service';
 import { Post } from 'src/app/shared/post.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from 'src/app/profile/profile.service';
+import { Profile } from 'src/app/profile/profile.model';
 
 @Component({
   selector: 'app-create-post',
@@ -13,7 +14,8 @@ import { ProfileService } from 'src/app/profile/profile.service';
 })
 export class CreatePostComponent implements OnInit {
   addImages = false;
-  createPostForm: FormGroup
+  createPostForm: FormGroup;
+  currentUid: string;
 
   constructor( private postService: PostService, private profileService: ProfileService,
                 private route: ActivatedRoute, private router: Router) { }
@@ -30,9 +32,12 @@ export class CreatePostComponent implements OnInit {
     }
 
     console.log(imagePaths)
+    const profile: Profile = this.profileService.getProfile(this.profileService.getCurrentUser());
 
-    const newPost = new Post(
-      this.profileService.getUid(),
+    const newPost = new Post( 
+      profile.uid,
+      profile.firstName,
+      profile.lastName,
       this.createPostForm.value['postBody'],
       imagePaths,
       [],

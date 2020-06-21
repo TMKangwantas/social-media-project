@@ -7,7 +7,7 @@
           <div 
             class="col-md"
             *ngFor="let post of feed; let i = index">
-            <h5>{{post.uid}}</h5>
+            <a href="" onclick="return false" (click)="onProfileClick(post.uid)">{{post.firstName}} {{post.lastName}}</a>
             <p>{{post.body}}</p>
             <div class="row" *ngIf="post.imagePaths.length !== 0">
                 <div 
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3" (click)="onLike(i)" > <!-- Have to pass and uid  -->
+                <div class="col-md-3" (click)="onLike(i)" > 
                     <a href="" onclick="return false">{{post.likes.length}} {{ post.likes.length == 1 ? "Like" : "Likes"}}</a>
                 </div>
                 <div class="col-md-3" (click)="onShowComments()">
@@ -31,7 +31,7 @@
                     class="col-md-8"
                     *ngFor="let comments of post.comments; let i = index"
                     >
-                    <h6>{{comments.firstName}} {{ comments.lastName}}</h6>
+                    <a href="" onclick="return false" (click)="onProfileClick(comments.uid)">{{comments.firstName}} {{comments.lastName}}</a>
                     <p>{{comments.body}}</p>
                 </div>
                 <div class="col-md-8" style="background-color:dimgray;">
