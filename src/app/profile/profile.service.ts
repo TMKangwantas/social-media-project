@@ -13,4 +13,8 @@ export class ProfileService {
     getProfile() {
         return this.profile;
     }
+
+    getUid() {
+        return this.profile.uid;
+    }
 }

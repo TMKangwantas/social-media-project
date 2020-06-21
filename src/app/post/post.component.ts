@@ -1,11 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 import { Post } from '../shared/post.model';
 import { PostService } from './post.service';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { Comment } from '../shared/comment.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Profile } from '../profile/profile.model';
+import { ProfileService } from '../profile/profile.service';
 
 @Component({
   selector: 'app-post',
@@ -16,9 +18,10 @@ export class PostComponent implements OnInit, OnDestroy {
   showComments = false;
   subscription: Subscription;
   comment: string;
+  // @Input() uid: string;
   feed: Post[] = [];
 
-  constructor(private postService: PostService, private route: ActivatedRoute) { }
+  constructor(private postService: PostService, private profileService: ProfileService,  private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.subscription = this.postService.postsChanged.subscribe(
@@ -33,7 +36,7 @@ export class PostComponent implements OnInit, OnDestroy {
       this.feed = this.postService.getAllPosts();
     }
     else {
-      this.feed = this.postService.getProfilePosts();
+          this.feed = this.postService.getProfilePosts(this.profileService.getUid());
     }
   }
 

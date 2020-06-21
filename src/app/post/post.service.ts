@@ -8,7 +8,7 @@ export class PostService {
     private feed: Post[] = 
     [
       new Post(
-        'Erika Jay',
+        '123',
         'Welcome to the social media page!',
         [],
         [
@@ -37,8 +37,8 @@ export class PostService {
         return this.feed.slice();
     }
 
-    getProfilePosts() {
-      return [];
+    getProfilePosts(uid: string) {
+      return this.feed.filter(p => p.uid === uid);
     }
 
     addPost(post: Post) {
