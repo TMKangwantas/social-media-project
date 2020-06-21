@@ -14,7 +14,6 @@ import { ProfileService } from '../profile/profile.service';
   styleUrls: ['./post.component.css'],
 })
 export class PostComponent implements OnInit, OnDestroy {
-  showComments = false;
   subscription: Subscription;
   comment: string;
   feed: Post[] = [];
@@ -40,6 +39,7 @@ export class PostComponent implements OnInit, OnDestroy {
   onProfileClick(uid: string) {
     this.profileService.setCurrentUser(uid);
     this.router.navigate(['../profile', uid], {relativeTo: this.route});
+    this.closeComments();
     this.postService.getProfilePosts(this.profileService.getCurrentUser());
   }
 
@@ -61,8 +61,14 @@ export class PostComponent implements OnInit, OnDestroy {
     form.reset();
   }
 
-  onShowComments() {
-    this.showComments = !this.showComments;
+  onShowComments(index: number) {
+    this.feed[index].showComments = !this.feed[index].showComments;
+  }
+
+  private closeComments() {
+    for (let posts of this.feed) {
+      posts.showComments = false;
+    }
   }
 
   ngOnDestroy() {
