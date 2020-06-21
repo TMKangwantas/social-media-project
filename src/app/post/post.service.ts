@@ -63,9 +63,14 @@ export class PostService {
         this.postsChanged.next(this.feed.filter(p => p.uid === uid));
     }
 
-    addPost(post: Post) {
+    addPost(post: Post, createdOnHomePage: boolean, uid: string = null) {
         this.feed.push(post);
-        this.postsChanged.next(this.feed.slice());
+        if (createdOnHomePage) {
+          this.postsChanged.next(this.feed.slice());
+        }
+        else {
+          this.getProfilePosts(uid);
+        }
     }
 
     likePost(index: number) {

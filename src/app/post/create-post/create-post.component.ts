@@ -30,8 +30,8 @@ export class CreatePostComponent implements OnInit {
     for (let path of this.createPostForm.value['imagePaths']) {
       imagePaths.push(path['imagePath']);
     }
-
-    console.log(imagePaths)
+    
+    console.log(this.route.snapshot);
     const profile: Profile = this.profileService.getProfile(this.profileService.getCurrentUser());
 
     const newPost = new Post( 
@@ -44,8 +44,12 @@ export class CreatePostComponent implements OnInit {
       []
     );
     
-    this.postService.addPost(newPost);
-
+    if (this.route.snapshot.routeConfig === 'home') {
+      this.postService.addPost(newPost, true);
+    }
+    else {
+      this.postService.addPost(newPost, false, profile.uid);
+    }
     console.log(newPost);
     this.onCancel();
   }
