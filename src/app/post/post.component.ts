@@ -5,6 +5,7 @@ import { PostService } from './post.service';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { Comment } from '../shared/comment.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-post',
@@ -17,7 +18,7 @@ export class PostComponent implements OnInit, OnDestroy {
   comment: string;
   feed: Post[] = [];
 
-  constructor(private postService: PostService) { }
+  constructor(private postService: PostService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.subscription = this.postService.postsChanged.subscribe(
@@ -25,7 +26,15 @@ export class PostComponent implements OnInit, OnDestroy {
         this.feed = feed;
       }
     );
-    this.feed = this.postService.getPosts();
+    
+    const urlPath = this.route.snapshot.routeConfig.path;
+
+    if (urlPath === "home") {
+      this.feed = this.postService.getAllPosts();
+    }
+    else {
+      this.feed = this.postService.getProfilePosts();
+    }
   }
 
   onLike(index: number) {

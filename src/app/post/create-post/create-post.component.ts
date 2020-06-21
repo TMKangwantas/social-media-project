@@ -21,10 +21,18 @@ export class CreatePostComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
+    const imagePaths = [];
+
+    for (let path of this.createPostForm.value['imagePaths']) {
+      imagePaths.push(path['imagePath']);
+    }
+
+    console.log(imagePaths)
+
     const newPost = new Post(
       'Erika Jay',
       this.createPostForm.value['postBody'],
-      this.createPostForm.value['imagePaths'],
+      imagePaths,
       [],
       []
     );
@@ -32,8 +40,7 @@ export class CreatePostComponent implements OnInit {
     this.postService.addPost(newPost);
 
     console.log(newPost);
-    
-      
+    this.onCancel();
   }
 
   onCancel() {

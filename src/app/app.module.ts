@@ -9,6 +9,8 @@ import { PostService } from './post/post.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProfileComponent } from './profile/profile.component';
 import { AppRoutingModules } from './app-routing.module';
+import { ProfileDetailsComponent } from './profile/profile-details/profile-details.component';
+import { ProfileService } from './profile/profile.service';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,8 @@ import { AppRoutingModules } from './app-routing.module';
     HeaderComponent,
     PostComponent,
     CreatePostComponent,
-    ProfileComponent
+    ProfileComponent,
+    ProfileDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +28,8 @@ import { AppRoutingModules } from './app-routing.module';
     AppRoutingModules
   ],
   providers: [
-    PostService
+    PostService,
+    ProfileService
   ],
   bootstrap: [AppComponent]
 })

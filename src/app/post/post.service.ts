@@ -33,8 +33,12 @@ export class PostService {
       )
     ];
 
-    getPosts() {
+    getAllPosts() {
         return this.feed.slice();
+    }
+
+    getProfilePosts() {
+      return [];
     }
 
     addPost(post: Post) {
