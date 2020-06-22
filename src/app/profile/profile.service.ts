@@ -54,6 +54,6 @@ export class ProfileService {
     }
 
     addPostToUser(uid: string, postId: string) {
-        this.profiles.find(u => u.uid).postIds.push(postId);
+        this.profiles.find(u => u.uid === uid).postIds.push(postId);
     }
 }

@@ -12,13 +12,10 @@ export class DataStorageService {
     constructor(private http: HttpClient, private postService: PostService, private profileService: ProfileService) {}
 
     storePost(post: Post) {
-        console.log(post);
-        let sub = this.http.post(
+        return this.http.post(
             'https://social-media-project-b27ab.firebaseio.com/posts.json', 
             post
         );
-        this.fetchPosts();
-        return sub;
     }
 
     fetchPosts(uid: string = '', profilePostsOnly: boolean = false) {
