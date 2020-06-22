@@ -5,9 +5,10 @@ export class Profile {
     public email: string;
     public location: string;
     public profileImagePath: string;
+    public postIds: string[];
 
     constructor(uid: string, firstName: string, lastName: string, email: string, 
-        location: string, profileImagePath: string) 
+        location: string, profileImagePath: string, postIds: string[]) 
         {
             this.uid = uid;
             this.firstName = firstName;
@@ -15,6 +16,7 @@ export class Profile {
             this.email = email;
             this.location = location;
             this.profileImagePath = profileImagePath;
+            this.postIds = postIds;
         }
 
 

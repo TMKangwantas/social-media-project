@@ -1,80 +1,62 @@
 import { Post } from '../shared/post.model';
 import { Comment } from '../shared/comment.model';
 import { Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { ProfileService } from '../profile/profile.service';
 
+@Injectable({providedIn: 'root'})
 export class PostService {
-    postsChanged = new Subject<Post[]>();
+    postsChanged = new Subject<{[key: string]: Post}>();
+    private feed: {[key: string] : Post} = {};
 
-    private feed: Post[] = 
-    [
-      new Post(
-        '123',
-        'Erika',
-        'Jay',
-        'Welcome to the social media page!',
-        [],
-        [
-          'Lisa Vander',
-          'Camille Graham',
-          'Adrienne Mal'
-        ],
-        [
-          new Comment(
-            '321',
-            'Lisa',
-            'Vander',
-            'Thanks for the welcome!'
-          ),
-          new Comment(
-            '345',
-            'Camille',
-            'Graham',
-            'Love it, looks wonderful!'
-          )
-        ]
-      ),
-      new Post(
-        '321',
-        'Lisa',
-        'Vander',
-        'Welcome!',
-        [],
-        [
-          'Lisa Vander',
-          'Camille Graham',
-          'Adrienne Mal'
-        ],
-        [
-          new Comment(
-            '345',
-            'Camille',
-            'Graham',
-            'Love it!'
-          )
-        ]
-      )
-    ];
+    constructor(private profileService: ProfileService) {}
 
     getAllPosts() {
-        return this.feed.slice();
+      return this.feed;
     }
 
     getProfilePosts(uid: string) {
-        this.postsChanged.next(this.feed.filter(p => p.uid === uid));
+      const profilePosts = this.profileService.getProfilePosts(uid);
+      if (profilePosts.length === 0) {
+        this.postsChanged.next({});
+      }
+      else {
+        var filteredPosts = Object.keys(this.feed).
+        filter(key => profilePosts.includes(key)).
+        reduce((newPosts, key) => {
+          newPosts[key] = this.feed[key];
+          return newPosts;
+        }, {});
+      this.postsChanged.next(filteredPosts);
+      }
+    }
+
+    getLikes(postId: string) {
+      return this.feed[postId].likes;
+    }
+
+    getComments(postId: string) {
+      return this.feed[postId].comments;
+    }
+
+    setPosts(posts: {[key: string]: Post}) {
+      this.feed = posts;
+      this.postsChanged.next(this.feed);
     }
 
     addPost(post: Post, createdOnHomePage: boolean, uid: string = null) {
-        this.feed.push(post);
-        if (createdOnHomePage) {
-          this.postsChanged.next(this.feed.slice());
-        }
-        else {
-          this.getProfilePosts(uid);
-        }
+        // this.dataStorageService.storePost(post);
+        // this.dataStorageService.fetchPosts();
+        // if (createdOnHomePage) {
+        //   this.postsChanged.next(this.feed);
+        // }
+        // else {
+        //   this.getProfilePosts(uid);
+        // }
     }
 
-    likePost(index: number) {
-        const currentPost = this.feed[index].likes;
+    likePost(key: string) {
+        const currentPost = this.feed[key].likes;
 
         if (!currentPost.includes('Erika Jay')) {      //Obviously will change later 
             currentPost.push('Erika Jay');
@@ -82,16 +64,20 @@ export class PostService {
         else {
             currentPost.splice(currentPost.indexOf('Erika Jay'), 1);
         }
-        this.postsChanged.next(this.feed.slice());
+        this.postsChanged.next(this.feed);
     }
 
-    commentPost(comment: Comment, index: number) {
-        this.feed[index].comments.push(comment);
-        this.postsChanged.next(this.feed.slice());
+    commentPost(comment: Comment, key: string) {
+        this.feed[key].comments.push(comment);
+        this.postsChanged.next(this.feed);
     }
 
-    deletePost(index: number) {
-        this.feed.splice(index, 1);
-        this.postsChanged.next(this.feed.slice());
+    deletePost(key: string) {
+        delete this.feed[key];
+        this.postsChanged.next(this.feed);
+    }
+
+    deleteComment(index: number, key: string) {
+        this.feed[key].comments.splice(index, 1);
     }
 }

@@ -6,6 +6,7 @@ import { Post } from 'src/app/shared/post.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from 'src/app/profile/profile.service';
 import { Profile } from 'src/app/profile/profile.model';
+import { DataStorageService } from 'src/app/shared/data-storage.service';
 
 @Component({
   selector: 'app-create-post',
@@ -17,7 +18,7 @@ export class CreatePostComponent implements OnInit {
   createPostForm: FormGroup;
   currentUid: string;
 
-  constructor( private postService: PostService, private profileService: ProfileService,
+  constructor( private postService: PostService, private profileService: ProfileService, private dataStorageService: DataStorageService,
                 private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
@@ -29,9 +30,7 @@ export class CreatePostComponent implements OnInit {
 
     for (let path of this.createPostForm.value['imagePaths']) {
       imagePaths.push(path['imagePath']);
-    }
-    
-    console.log(this.route.snapshot);
+      }
     const profile: Profile = this.profileService.getProfile(this.profileService.getCurrentUser());
 
     const newPost = new Post( 
@@ -44,13 +43,19 @@ export class CreatePostComponent implements OnInit {
       []
     );
     
-    if (this.route.snapshot.routeConfig === 'home') {
-      this.postService.addPost(newPost, true);
-    }
-    else {
-      this.postService.addPost(newPost, false, profile.uid);
-    }
-    console.log(newPost);
+    let data = this.dataStorageService.storePost(newPost).subscribe(
+      response => {
+          console.log(response['name']);
+          this.profileService.addPostToUser(profile.uid, response['name']);
+      }
+    );
+
+    // if (this.route.snapshot.routeConfig.path === 'home') {
+    //   this.dataStorageService.fetchPosts();
+    // }
+    // else {
+    //   this.dataStorageService.fetchPosts(profile.uid, true);
+    // }
     this.onCancel();
   }
 

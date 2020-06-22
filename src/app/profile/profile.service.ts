@@ -10,7 +10,8 @@ export class ProfileService {
             'Jay',
             'erikaJay@test.com',
             'Beverly Hills, CA',
-            'https://storage.needpix.com/rsynced_images/user-2935527_1280.png'
+            'https://storage.needpix.com/rsynced_images/user-2935527_1280.png',
+            ['-MAOWcdzET9s5mnJnYZy']
         ),
         new Profile (
             '321',
@@ -18,7 +19,8 @@ export class ProfileService {
             'Vander',
             'lisaVander@test.com',
             'Beverly Hills, CA',
-            'https://storage.needpix.com/rsynced_images/user-2935527_1280.png'
+            'https://storage.needpix.com/rsynced_images/user-2935527_1280.png',
+            ['-MANefiBZqrRkQLKVZnX', '-MAOTjKwWRR84TBYrVIb']
         ),
         new Profile (
             '345',
@@ -26,7 +28,8 @@ export class ProfileService {
             'Graham',
             'camilleGraham@test.com',
             'Beverly Hills, CA',
-            'https://storage.needpix.com/rsynced_images/user-2935527_1280.png'
+            'https://storage.needpix.com/rsynced_images/user-2935527_1280.png',
+            []
         )
     ];
 
@@ -38,11 +41,19 @@ export class ProfileService {
         return this.profiles.find(u => u.uid === uid).uid;
     }
 
+    getProfilePosts(uid: string) {
+        return this.profiles.find(u => u.uid === uid).postIds;
+    }
+
     setCurrentUser(uid: string) {
         this.currentUid = uid;
     }
 
     getCurrentUser() {
         return this.currentUid;
+    }
+
+    addPostToUser(uid: string, postId: string) {
+        this.profiles.find(u => u.uid).postIds.push(postId);
     }
 }

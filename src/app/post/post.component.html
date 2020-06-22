@@ -6,10 +6,10 @@
           </div>
           <div 
             class="col-md"
-            *ngFor="let post of feed; let i = index">
-            <a href="" onclick="return false" (click)="onProfileClick(post.uid)">{{post.firstName}} {{post.lastName}}</a>
-            <p>{{post.body}}</p>
-            <div class="row" *ngIf="post.imagePaths.length !== 0">
+            *ngFor="let post of feed | keyvalue">
+            <a style="cursor: pointer;" (click)="onProfileClick(post.value.uid)">{{post.value.firstName}} {{post.value.lastName}}</a>
+            <p>{{post.value.body}}</p>
+            <div class="row" *ngIf="post.value.imagePaths.length !== 0">
                 <div 
                     class="col-xs-12" 
                     *ngFor="let path of post.imagePaths; let i = index"
@@ -18,24 +18,31 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3" (click)="onLike(i)" > 
-                    <a href="" onclick="return false">{{post.likes.length}} {{ post.likes.length == 1 ? "Like" : "Likes"}}</a>
+                <div class="col-md-3" (click)="onLike(post.key)" > 
+                    <a style="cursor: pointer;">{{post.value.likes.length}} {{ post.value.likes.length == 1 ? "Like" : "Likes"}}</a>
                 </div>
-                <div class="col-md-3" (click)="onShowComments(i)">
-                    <a href="" onclick="return false">{{post.comments.length}} {{ post.comments.length == 1 ? "Comment" : "Comments"}}</a>
+                <div class="col-md-3" (click)="onShowComments(post.key)">
+                    <a style="cursor: pointer;">{{post.value.comments.length}} {{ post.value.comments.length == 1 ? "Comment" : "Comments"}}</a>
                 </div>
                 <div class="col-md-3"></div>
             </div>
-            <div class="row" *ngIf="post.showComments">
+            <div class="row" *ngIf="post.value.showComments">
                 <div 
                     class="col-md-8"
-                    *ngFor="let comments of post.comments; let i = index"
+                    *ngFor="let comments of post.value.comments, let i = index"
                     >
-                    <a href="" onclick="return false" (click)="onProfileClick(comments.uid)">{{comments.firstName}} {{comments.lastName}}</a>
-                    <p>{{comments.body}}</p>
+                    <div class="col-md-6">
+                        <a style="cursor: pointer;" (click)="onProfileClick(comments.uid)">{{comments.firstName}} {{comments.lastName}}</a>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-danger" style="float: right;" (click)="onDeleteComment(i, post.key)">X</button>
+                    </div>
+                    <div class="col-md col-md-offset-1">
+                        <p>{{comments.body}}</p>
+                    </div>
                 </div>
                 <div class="col-md-8" style="background-color:dimgray;">
-                    <form #commentForm="ngForm" (ngSubmit)="onComment(commentForm, i)">
+                    <form #commentForm="ngForm" (ngSubmit)="onComment(commentForm, post.key)">
                         <div class="form-group">
                             <input 
                                 type="text"
