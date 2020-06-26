@@ -12,6 +12,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { AppRoutingModules } from './app-routing.module';
 import { ProfileDetailsComponent } from './profile/profile-details/profile-details.component';
 import { ProfileService } from './profile/profile.service';
+import { AuthComponent } from './auth/auth.component';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { ProfileService } from './profile/profile.service';
     PostComponent,
     CreatePostComponent,
     ProfileComponent,
-    ProfileDetailsComponent
+    ProfileDetailsComponent,
+    AuthComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,

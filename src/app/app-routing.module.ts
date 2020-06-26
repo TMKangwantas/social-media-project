@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { PostComponent } from './post/post.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileDetailsComponent } from './profile/profile-details/profile-details.component';
+import { AuthComponent } from './auth/auth.component';
 
 const appRoutes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -12,6 +13,7 @@ const appRoutes: Routes = [
             {path: ':uid', component: ProfileDetailsComponent}
         ] 
     },
+    { path: 'auth', component: AuthComponent}
 ];
 
 @NgModule({

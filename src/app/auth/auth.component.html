@@ -1,0 +1,90 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div *ngIf="isLoading" style="text-align: center;">
+            <app-loading-spinner></app-loading-spinner>
+        </div>
+        <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    class="form-control"
+                    ngModel
+                    name="email"
+                    required
+                    email>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    class="form-control"
+                    ngModel
+                    name="password"
+                    required
+                    minlength="6">
+            </div>
+            <div *ngIf="!isLoginMode">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input 
+                        type="text"
+                        id="firstName"
+                        class="form-control"
+                        ngModel
+                        name="firstName"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input 
+                        type="text"
+                        id="lastName"
+                        class="form-control"
+                        ngModel
+                        name="lastName"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Location</label>
+                    <input 
+                        placeholder="City"
+                        type="text"
+                        id="city"
+                        class="form-control"
+                        ngModel
+                        name="city"
+                        required>
+                </div>
+                <div class="form-group">
+                    <input 
+                        placeholder="State"
+                        type="text"
+                        id="state"
+                        class="form-control"
+                        ngModel
+                        name="state"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Profile Image</label>
+                    <input 
+                        type="text"
+                        id="profileImagePath"
+                        class="form-control"
+                        ngModel
+                        name="profileImagePath"
+                        required>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-primary" type="submit" [disabled]="!authForm.valid">
+                    {{ isLoginMode ? 'Login' : 'Sign Up' }}
+                </button> | 
+                <button class="btn btn-primary" (click)="onSwitchMode()" type="button">Switch to {{ isLoginMode ? 'Sign Up' : 'Login' }}</button>
+            </div>
+        </form>
+    </div>
+</div>

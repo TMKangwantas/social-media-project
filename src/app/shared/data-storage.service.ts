@@ -6,12 +6,13 @@ import { PostService } from '../post/post.service';
 import { Post } from './post.model';
 import { ProfileService } from '../profile/profile.service';
 import { Comment } from './comment.model';
+import { Profile } from '../profile/profile.model';
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
     constructor(private http: HttpClient, private postService: PostService, private profileService: ProfileService) {}
 
-    storePost(post: Post) {
+    createPost(post: Post) {
         return this.http.post(
             'https://social-media-project-b27ab.firebaseio.com/posts.json', 
             post
@@ -98,5 +99,9 @@ export class DataStorageService {
     //         }
     //     )
     // }
+
+    createProfile(profile: Profile) {
+        console.log(profile);
+    }
 
 }
