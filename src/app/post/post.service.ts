@@ -44,17 +44,6 @@ export class PostService {
       this.postsChanged.next(this.feed);
     }
 
-    addPost(post: Post, createdOnHomePage: boolean, uid: string = null) {
-        // this.dataStorageService.storePost(post);
-        // this.dataStorageService.fetchPosts();
-        // if (createdOnHomePage) {
-        //   this.postsChanged.next(this.feed);
-        // }
-        // else {
-        //   this.getProfilePosts(uid);
-        // }
-    }
-
     likePost(key: string) {
         const currentPost = this.feed[key].likes;
 

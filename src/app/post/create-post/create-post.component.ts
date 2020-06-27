@@ -43,17 +43,7 @@ export class CreatePostComponent implements OnInit {
       []
     );
     
-    this.dataStorageService.createPost(newPost).subscribe(
-      response => {
-          this.profileService.addPostToUser(profile.uid, response['name']);
-          if (this.route.routeConfig.path === 'home') {
-            this.dataStorageService.fetchPosts();
-          }
-          else {
-            this.dataStorageService.fetchPosts(profile.uid, true);
-          }
-      }
-    );
+    this.dataStorageService.createPost(newPost, this.route.routeConfig.path, profile.uid);
     
     this.onCancel();
   }

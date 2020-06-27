@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { PostService } from '../post/post.service';
 import { Post } from './post.model';
@@ -12,10 +12,29 @@ import { Profile } from '../profile/profile.model';
 export class DataStorageService {
     constructor(private http: HttpClient, private postService: PostService, private profileService: ProfileService) {}
 
-    createPost(post: Post) {
-        return this.http.post(
+    createPost(post: Post, route: string, uid: string) {
+        this.http.post(
             'https://social-media-project-b27ab.firebaseio.com/posts.json', 
             post
+        ).pipe(
+            tap(
+                response => {
+                    this.profileService.addPostToUser(uid, response['name']);
+                },
+                error => {},
+                () => {
+                    if (route === 'home') {
+                        this.fetchPosts();
+                      }
+                      else {
+                        this.fetchPosts(uid, true);
+                      }
+                }
+            )
+        ).subscribe(
+            response => {
+                console.log();
+            }
         );
     }
 

@@ -39,35 +39,28 @@ export class AuthComponent {
             authObs = this.authService.login(email, password);
         }
         else {
-            authObs = this.authService.signup(email, password);
-            this.profile = new Profile(
-                '',
-                form.value.firstName,
-                form.value.lastName,
-                email,
-                form.value.city + ' ' + form.value.state,
-                form.value.profileImagePath
+            authObs = this.authService.signup(
+                new Profile(
+                    '',
+                    form.value.firstName,
+                    form.value.lastName,
+                    email,
+                    form.value.city + ' ' + form.value.state,
+                    form.value.profileImagePath
+                ),
+                password
             );
         }
 
         authObs.subscribe(
             response => {
                 console.log(response);
-                if (!this.isLoginMode) {
-                    uid = response.localId;
-                }
                 this.isLoading = false;
             },
             errorMessage => {
                 console.log(errorMessage);
                 this.error = errorMessage;
                 this.isLoading = false;
-            },
-            () => {
-                if (!this.isLoginMode) {
-                    this.profile.uid = uid;
-                    this.dataStorageService.createProfile(this.profile);
-                }
             }
         );
         
