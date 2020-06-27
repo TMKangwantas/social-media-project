@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -14,6 +14,9 @@ import { ProfileDetailsComponent } from './profile/profile-details/profile-detai
 import { ProfileService } from './profile/profile.service';
 import { AuthComponent } from './auth/auth.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { LikePostComponent } from './post/like-post/like-post.component';
+import { CommentPostComponent } from './post/comment-post/comment-post.component';
+import { AuthInterceptorService } from './auth/auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,9 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     ProfileComponent,
     ProfileDetailsComponent,
     AuthComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    LikePostComponent,
+    CommentPostComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +40,12 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
   ],
   providers: [
     PostService,
-    ProfileService
+    ProfileService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { AuthSerivce } from './auth.service';
+import { AuthService } from './auth.service';
 import { AuthResponseData } from './auth-response-data.model';
 import { DataStorageService } from '../shared/data-storage.service';
 import { Profile } from '../profile/profile.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-auth',
@@ -17,7 +18,8 @@ export class AuthComponent {
     error: string = null;
     profile: Profile;
 
-    constructor(private authService: AuthSerivce, private dataStorageService: DataStorageService) {}
+    constructor(private authService: AuthService, private dataStorageService: DataStorageService,
+                private router: Router) {}
 
     onSwitchMode() {
         this.isLoginMode = !this.isLoginMode;
@@ -56,6 +58,7 @@ export class AuthComponent {
             response => {
                 console.log(response);
                 this.isLoading = false;
+                this.router.navigate(['/home']);
             },
             errorMessage => {
                 console.log(errorMessage);
@@ -65,9 +68,5 @@ export class AuthComponent {
         );
         
         form.reset();
-    }
-
-    login(email: string, password: string) {
-
     }
 } 

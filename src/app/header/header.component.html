@@ -4,10 +4,10 @@
             <a href="#" class="navbar-brand">Marc's Social Media</a>
         </div>
         
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" *ngIf="isAuthenticated">
             <ul class="nav navbar-nav">
                 <li routerLinkActive="active"><a routerLink="/home">Home</a></li>
-                <li routerLinkActive="active"><a routerLink="/profile">Profile</a></li>
+                <li routerLinkActive="active"><a routerLink="/profile/{{uid}}">Profile</a></li>
                 <li><a>Search</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">

@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { AuthResponseData } from './auth-response-data.model';
-import { throwError, Subject } from 'rxjs';
+import { throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { User } from './user.model';
 import { DataStorageService } from '../shared/data-storage.service';
 import { Profile } from '../profile/profile.model';
 
 @Injectable({providedIn: 'root'})
-export class AuthSerivce {
-    user = new Subject<User>();
+export class AuthService {
+    user = new BehaviorSubject<User>(null);
 
     constructor(private http: HttpClient, private dataStorageService: DataStorageService) {}
 
@@ -27,14 +27,7 @@ export class AuthSerivce {
                 tap(
                     resData => {
                         uid = resData.localId;
-                        const expirationDate = new Date(new Date().getTime() + +resData.expiresIn * 1000);
-                        const user = new User(
-                            resData.email, 
-                            resData.localId, 
-                            resData.idToken, 
-                            expirationDate
-                        );
-                        this.user.next();
+                        this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
                     },
                     error => {},
                     () => {
@@ -54,7 +47,12 @@ export class AuthSerivce {
                 returnSecureToken: true
             }
         ).pipe(
-            catchError(this.handleError)
+            catchError(this.handleError),
+            tap(
+                resData => {
+                    this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
+                }
+            )
         );
     }
 
@@ -80,7 +78,14 @@ export class AuthSerivce {
         return throwError(errorMessage);
     }
 
-    private handleAuthentication(email: string, token: string, expiresIn: number) {
-
+    private handleAuthentication(email: string, uid: string, token: string, expiresIn: number) {
+        const expirationDate = new Date(new Date().getTime() + +expiresIn * 1000);
+        const user = new User(
+            email, 
+            uid, 
+            token, 
+            expirationDate
+        );
+        this.user.next(user);
     }
 }
