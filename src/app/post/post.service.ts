@@ -16,7 +16,6 @@ export class PostService {
     }
 
     getProfilePosts(uid: string) {
-      console.log(this.feed.filter(p => p.uid === uid))
       this.postsChanged.next(this.feed.filter(p => p.uid === uid));
     }
 
@@ -48,6 +47,10 @@ export class PostService {
             currentPost.splice(currentPost.indexOf('Erika Jay'), 1);
         }
         this.postsChanged.next(this.feed.slice());
+    }
+
+    closeComments() {
+      this.feed.map(p => p.showComments = false);
     }
 
     commentPost(comment: Comment, index: number) {

@@ -40,46 +40,13 @@ export class PostComponent implements OnInit, OnDestroy {
 
   onProfileClick(uid: string) {
     this.profileService.setCurrentUser(uid);
-    this.closeComments();
+    this.postService.closeComments();
     this.router.navigate(['../profile', uid], {relativeTo: this.route});
     this.postService.getProfilePosts(this.profileService.getCurrentUser());
   }
 
-  onLike(index: number, databaseId: string) {
-    this.postService.likePost(index);
-    this.dataStorageService.likePost(databaseId, this.postService.getLikes(index));
-  }
-
-  onComment(form: NgForm, databaseId: string, index: number) {
-    if (!form.valid)
-      return;
-
-    const comment = new Comment(
-      '123',
-      'Erika',
-      'Jay',
-      form.value.comment
-    )
-    this.postService.commentPost(comment, index);
-    this.dataStorageService.commentPost(databaseId, this.postService.getComments(index));
-    form.reset();
-  }
-
-  onDeleteComment(postIndex: number, commentIndex: number, databaseId: string) {
-    //TODO: Only allow owner of comments to delete comments,
-    //for now, allow anyone to delete comments
-    this.postService.deleteComment(postIndex, commentIndex);
-    this.dataStorageService.commentPost(databaseId, this.postService.getComments(postIndex));
-  }
-
   onShowComments(index: number) {
     this.feed[index].showComments = !this.feed[index].showComments;
-  }
-
-  private closeComments() {
-    for (let posts in this.feed) {
-      this.feed[posts].showComments = false;
-    }
   }
 
   ngOnDestroy() {

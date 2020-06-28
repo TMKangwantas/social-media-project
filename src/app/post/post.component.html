@@ -18,48 +18,18 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3" (click)="onLike(i, post.databaseId)" > 
-                    <a style="cursor: pointer;">{{post.likes.length}} {{ post.likes.length == 1 ? "Like" : "Likes"}}</a>
-                </div>
+                <app-like-post
+                    [post]="post"
+                    [index]="i">
+                </app-like-post>
                 <div class="col-md-3" (click)="onShowComments(i)">
                     <a style="cursor: pointer;">{{post.comments.length}} {{ post.comments.length == 1 ? "Comment" : "Comments"}}</a>
                 </div>
-                <div class="col-md-3"></div>
             </div>
             <div class="row" *ngIf="post.showComments">
-                <div 
-                    class="col-md-8"
-                    *ngFor="let comments of post.comments, let j = index"
-                    >
-                    <div class="col-md-6">
-                        <a style="cursor: pointer;" (click)="onProfileClick(comments.uid)">{{comments.firstName}} {{comments.lastName}}</a>
-                    </div>
-                    <div class="col-md-6">
-                        <button class="btn btn-danger" style="float: right;" (click)="onDeleteComment(i, j, post.databaseId)">X</button>
-                    </div>
-                    <div class="col-md col-md-offset-1">
-                        <p>{{comments.body}}</p>
-                    </div>
-                </div>
-                <div class="col-md-8" style="background-color:dimgray;">
-                    <form #commentForm="ngForm" (ngSubmit)="onComment(commentForm, post.databaseId, i)">
-                        <div class="form-group">
-                            <input 
-                                type="text"
-                                id="comment"
-                                class="form-control"
-                                ngModel
-                                name="comment"
-                                required
-                                placeholder="Write a comment">
-                        </div>
-                        <div>
-                            <button class="btn btn-primary" type="submit" [disabled]="comment">
-                                Comment
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                <app-comment-post
+                    [post]="post"
+                    [postIndex]="i"></app-comment-post>
             </div>
           </div>
       </div>

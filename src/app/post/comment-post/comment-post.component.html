@@ -1,1 +1,33 @@
-<p>comment-post works!</p>
+<div 
+    class="col-md-8"
+    *ngFor="let comments of post.comments, let i = index"
+    >
+    <div class="col-md-6">
+        <a style="cursor: pointer;" (click)="onProfileClick(comments.uid)">{{comments.firstName}} {{comments.lastName}}</a>
+    </div>
+    <div class="col-md-6">
+        <button class="btn btn-danger" style="float: right;" (click)="onDeleteComment(postIndex, i, post.databaseId)">X</button>
+    </div>
+    <div class="col-md col-md-offset-1">
+        <p>{{comments.body}}</p>
+    </div>
+</div>
+<div class="col-md-8" style="background-color:dimgray;">
+    <form #commentForm="ngForm" (ngSubmit)="onComment(commentForm, post.databaseId, postIndex)">
+        <div class="form-group">
+            <input 
+                type="text"
+                id="comment"
+                class="form-control"
+                ngModel
+                name="comment"
+                required
+                placeholder="Write a comment">
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit" [disabled]="comment">
+                Comment
+            </button>
+        </div>
+    </form>
+</div>
