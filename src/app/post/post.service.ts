@@ -6,8 +6,8 @@ import { ProfileService } from '../profile/profile.service';
 
 @Injectable()
 export class PostService {
-    postsChanged = new Subject<{[key: string]: Post}>();
-    private feed: {[key: string] : Post} = {};
+    postsChanged = new Subject<Post[]>();
+    private feed: Post[] = [];
 
     constructor(private profileService: ProfileService) {}
 
@@ -16,36 +16,30 @@ export class PostService {
     }
 
     getProfilePosts(uid: string) {
-      const profilePosts = this.profileService.getProfilePosts(uid);
-      if (profilePosts.length === 0) {
-        this.postsChanged.next({});
+      console.log(this.feed.filter(p => p.uid === uid))
+      this.postsChanged.next(this.feed.filter(p => p.uid === uid));
+    }
+
+    getLikes(index: number) {
+      return this.feed[index].likes;
+    }
+
+    getComments(index: number) {
+      return this.feed[index].comments;
+    }
+
+    setPosts(posts: Post[], profileOnly: boolean, uid: string) {
+      this.feed = posts;
+      if (profileOnly) {
+        this.getProfilePosts(uid);
       }
       else {
-        var filteredPosts = Object.keys(this.feed).
-        filter(key => profilePosts.includes(key)).
-        reduce((newPosts, key) => {
-          newPosts[key] = this.feed[key];
-          return newPosts;
-        }, {});
-      this.postsChanged.next(filteredPosts);
+        this.postsChanged.next(this.feed.slice());
       }
     }
 
-    getLikes(postId: string) {
-      return this.feed[postId].likes;
-    }
-
-    getComments(postId: string) {
-      return this.feed[postId].comments;
-    }
-
-    setPosts(posts: {[key: string]: Post}) {
-      this.feed = posts;
-      this.postsChanged.next(this.feed);
-    }
-
-    likePost(key: string) {
-        const currentPost = this.feed[key].likes;
+    likePost(index: number) {
+        const currentPost = this.feed[index].likes;
 
         if (!currentPost.includes('Erika Jay')) {      //Obviously will change later 
             currentPost.push('Erika Jay');
@@ -53,20 +47,20 @@ export class PostService {
         else {
             currentPost.splice(currentPost.indexOf('Erika Jay'), 1);
         }
-        this.postsChanged.next(this.feed);
+        this.postsChanged.next(this.feed.slice());
     }
 
-    commentPost(comment: Comment, key: string) {
-        this.feed[key].comments.push(comment);
-        this.postsChanged.next(this.feed);
+    commentPost(comment: Comment, index: number) {
+        this.feed[index].comments.push(comment);
+        this.postsChanged.next(this.feed.slice());
     }
 
-    deletePost(key: string) {
-        delete this.feed[key];
-        this.postsChanged.next(this.feed);
+    deletePost(index: number) {
+        delete this.feed[index];
+        this.postsChanged.next(this.feed.slice());
     }
 
-    deleteComment(index: number, key: string) {
-        this.feed[key].comments.splice(index, 1);
+    deleteComment(postIndex: number, commentIndex: number) {
+        this.feed[postIndex].comments.splice(commentIndex, 1);
     }
 }

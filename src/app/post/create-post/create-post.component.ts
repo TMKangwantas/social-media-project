@@ -35,12 +35,11 @@ export class CreatePostComponent implements OnInit {
 
     const newPost = new Post( 
       profile.uid,
+      '',
       profile.firstName,
       profile.lastName,
       this.createPostForm.value['postBody'],
-      imagePaths,
-      [],
-      []
+      imagePaths
     );
     
     this.dataStorageService.createPost(newPost, this.route.routeConfig.path, profile.uid);

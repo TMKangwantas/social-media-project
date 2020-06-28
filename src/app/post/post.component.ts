@@ -17,14 +17,14 @@ import { DataStorageService } from '../shared/data-storage.service';
 export class PostComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   comment: string;
-  feed: {[key: string]: Post} = {};
+  feed: Post[] = [];
 
   constructor(private postService: PostService, private profileService: ProfileService, private dataStorageService: DataStorageService,
               private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
     this.subscription = this.postService.postsChanged.subscribe(
-      (feed: {[key: string]: Post}) => {
+      (feed: Post[]) => {
         this.feed = feed;
       }
     );
@@ -35,7 +35,6 @@ export class PostComponent implements OnInit, OnDestroy {
     }
     else {
       this.postService.getProfilePosts(this.profileService.getCurrentUser());
-      this.dataStorageService.fetchPosts(this.profileService.getCurrentUser(), true);
     }
   }
 
@@ -46,12 +45,12 @@ export class PostComponent implements OnInit, OnDestroy {
     this.postService.getProfilePosts(this.profileService.getCurrentUser());
   }
 
-  onLike(key: string) {
-    this.postService.likePost(key);
-    this.dataStorageService.likePost(key, this.postService.getLikes(key));
+  onLike(index: number, databaseId: string) {
+    this.postService.likePost(index);
+    this.dataStorageService.likePost(databaseId, this.postService.getLikes(index));
   }
 
-  onComment(form: NgForm, key: string) {
+  onComment(form: NgForm, databaseId: string, index: number) {
     if (!form.valid)
       return;
 
@@ -61,16 +60,16 @@ export class PostComponent implements OnInit, OnDestroy {
       'Jay',
       form.value.comment
     )
-    this.postService.commentPost(comment, key);
-    this.dataStorageService.commentPost(key, this.postService.getComments(key));
+    this.postService.commentPost(comment, index);
+    this.dataStorageService.commentPost(databaseId, this.postService.getComments(index));
     form.reset();
   }
 
-  onDeleteComment(index: number, key: string) {
+  onDeleteComment(postIndex: number, commentIndex: number, databaseId: string) {
     //TODO: Only allow owner of comments to delete comments,
     //for now, allow anyone to delete comments
-    this.postService.deleteComment(index, key);
-    this.dataStorageService.commentPost(key, this.postService.getComments(key));
+    this.postService.deleteComment(postIndex, commentIndex);
+    this.dataStorageService.commentPost(databaseId, this.postService.getComments(postIndex));
   }
 
   onShowComments(index: number) {

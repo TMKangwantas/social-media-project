@@ -25,10 +25,10 @@ export class DataStorageService {
                 () => {
                     if (route === 'home') {
                         this.fetchPosts();
-                      }
-                      else {
+                    }
+                    else {
                         this.fetchPosts(uid, true);
-                      }
+                    }
                 }
             )
         ).subscribe(
@@ -42,36 +42,23 @@ export class DataStorageService {
         this.http.get<{[key: string]: Post}>(
             'https://social-media-project-b27ab.firebaseio.com/posts.json'
         ).pipe(
-            map(
-                posts => {
-                    for (let post in posts) {
-                        if (posts[post].imagePaths == null) {
-                            posts[post].imagePaths = [];
-                        }
-                        if (posts[post].likes == null) {
-                            posts[post].likes = [];
-                        }
-                        if (posts[post].comments == null) {
-                            posts[post].comments = [];
-                        }
+            tap(
+                response => {
+                    let posts: Post[] = [];
+                    for (let key in response) {
+                        const post = response[key];
+                        post.imagePaths = post.imagePaths == null ? [] : post.imagePaths;
+                        post.likes = post.likes == null ? [] : post.likes;
+                        post.comments = post.comments == null ? [] : post.comments;
+                        post.databaseId = key;
+                        posts.push(post);
                     }
-
-                    if (profilePostsOnly) {
-                        const profilePosts = this.profileService.getProfilePosts(uid);
-                        posts = Object.keys(posts).
-                        filter(key => profilePosts.includes(key)).
-                        reduce((newPosts, key) => {
-                            newPosts[key] = posts[key];
-                            return newPosts;
-                        }, {});
-                    }
-                    return posts;
+                    this.postService.setPosts(posts, profilePostsOnly, uid);
                 }
             )
         ).subscribe(
             response => {
                 console.log(response);
-                this.postService.setPosts(response);
             }
         );
     }
