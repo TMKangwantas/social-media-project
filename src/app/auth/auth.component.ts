@@ -44,6 +44,7 @@ export class AuthComponent {
             authObs = this.authService.signup(
                 new Profile(
                     '',
+                    '',
                     form.value.firstName,
                     form.value.lastName,
                     email,
@@ -58,6 +59,7 @@ export class AuthComponent {
             response => {
                 console.log(response);
                 this.isLoading = false;
+                this.dataStorageService.fetchProfiles();
                 this.router.navigate(['/home']);
             },
             errorMessage => {

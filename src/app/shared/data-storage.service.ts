@@ -120,7 +120,45 @@ export class DataStorageService {
     // }
 
     createProfile(profile: Profile) {
-        console.log(profile);
+        this.http.post(
+            'https://social-media-project-b27ab.firebaseio.com/profiles.json',
+            profile
+        ).pipe(
+            tap(
+                response => {
+                    profile.databaseId = response['name'];
+                    this.profileService.addProfile(profile);
+                    console.log(profile);
+                }
+            )
+        ).
+        subscribe(
+            response => {
+                console.log(response);
+            }
+        )
+    }
+
+    fetchProfiles() {
+        this.http.get<{[key: string]: Profile}>(
+            'https://social-media-project-b27ab.firebaseio.com/profiles.json'
+        ).pipe(
+            tap(
+                response => {
+                    for (let key in response) {
+                        const profile = response[key];
+                        profile.databaseId = key;
+                        profile.postIds = profile.postIds == null ? [] : profile.postIds;
+                        this.profileService.addProfile(profile);
+                    }
+                }
+            )
+        ).
+        subscribe(
+            response => {
+                console.log(response);
+            }
+        )
     }
 
 }

@@ -6,6 +6,7 @@ export class ProfileService {
     private profiles: Profile[] = [
         new Profile (
             '123',
+            '',
             'Erika',
             'Jay',
             'erikaJay@test.com',
@@ -15,6 +16,7 @@ export class ProfileService {
         ),
         new Profile (
             '321',
+            '',
             'Lisa',
             'Vander',
             'lisaVander@test.com',
@@ -24,6 +26,7 @@ export class ProfileService {
         ),
         new Profile (
             '345',
+            '',
             'Camille',
             'Graham',
             'camilleGraham@test.com',
@@ -55,5 +58,10 @@ export class ProfileService {
 
     addPostToUser(uid: string, postId: string) {
         this.profiles.find(u => u.uid === uid).postIds.push(postId);
+    }
+
+    addProfile(profile: Profile) {
+        this.profiles.push(profile);
+        console.log(this.profiles);
     }
 }
