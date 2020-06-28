@@ -6,12 +6,14 @@ import { catchError, tap } from 'rxjs/operators';
 import { User } from './user.model';
 import { DataStorageService } from '../shared/data-storage.service';
 import { Profile } from '../profile/profile.model';
+import { Router } from '@angular/router';
 
-@Injectable({providedIn: 'root'})
+@Injectable()
 export class AuthService {
     user = new BehaviorSubject<User>(null);
 
-    constructor(private http: HttpClient, private dataStorageService: DataStorageService) {}
+    constructor(private http: HttpClient, private dataStorageService: DataStorageService,
+                private router: Router) {}
 
     signup(profile: Profile, password: string) {
         let uid: string;
@@ -54,6 +56,11 @@ export class AuthService {
                 }
             )
         );
+    }
+
+    logout() {
+        this.user.next(null);
+        this.router.navigate(['/auth']);
     }
 
     private handleError(errorRes: HttpErrorResponse) {

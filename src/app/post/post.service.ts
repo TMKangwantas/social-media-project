@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ProfileService } from '../profile/profile.service';
 
-@Injectable({providedIn: 'root'})
+@Injectable()
 export class PostService {
     postsChanged = new Subject<{[key: string]: Post}>();
     private feed: {[key: string] : Post} = {};

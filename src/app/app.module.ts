@@ -16,6 +16,7 @@ import { AuthComponent } from './auth/auth.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { LikePostComponent } from './post/like-post/like-post.component';
 import { CommentPostComponent } from './post/comment-post/comment-post.component';
+import { AuthService } from './auth/auth.service';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 
 @NgModule({
@@ -41,6 +42,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
   providers: [
     PostService,
     ProfileService,
+    AuthService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,
