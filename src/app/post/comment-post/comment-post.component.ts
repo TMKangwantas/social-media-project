@@ -7,6 +7,7 @@ import { DataStorageService } from 'src/app/shared/data-storage.service';
 import { NgForm } from '@angular/forms';
 import { Comment } from 'src/app/shared/comment.model';
 import { EventEmitter } from 'protractor';
+import { Profile } from 'src/app/profile/profile.model';
 
 @Component({
   selector: 'app-comment-post',
@@ -16,6 +17,8 @@ import { EventEmitter } from 'protractor';
 export class CommentPostComponent implements OnInit {
   @Input() post: Post;
   @Input() postIndex: number;
+  @Input() uid: string;
+  @Input() onHome: boolean;
 
   constructor(private postService: PostService, private profileService: ProfileService, private dataStorageService: DataStorageService,
               private router: Router, private route: ActivatedRoute) { }
@@ -30,26 +33,28 @@ export class CommentPostComponent implements OnInit {
     this.postService.getProfilePosts(this.profileService.getCurrentUser());
   }
 
-  onComment(form: NgForm, databaseId: string, index: number) {
+  onComment(form: NgForm) {
     if (!form.valid)
       return;
 
+    const profile: Profile = this.profileService.getProfile(this.uid);
+
     const comment = new Comment(
-      '123',
-      'Erika',
-      'Jay',
+      this.uid,
+      profile.firstName,
+      profile.lastName,
       form.value.comment
     )
-    this.postService.commentPost(comment, index);
-    this.dataStorageService.commentPost(databaseId, this.postService.getComments(index));
+    this.postService.commentPost(comment, this.post.databaseId, this.onHome, this.profileService.getCurrentUser());
+    this.dataStorageService.commentPost(this.post.databaseId, this.postService.getComments(this.postIndex));
     form.reset();
   }
 
-  onDeleteComment(postIndex: number, commentIndex: number, databaseId: string) {
+  onDeleteComment(index: number) {
     //TODO: Only allow owner of comments to delete comments,
     //for now, allow anyone to delete comments
-    this.postService.deleteComment(postIndex, commentIndex);
-    this.dataStorageService.commentPost(databaseId, this.postService.getComments(postIndex));
+    this.postService.deleteComment(this.postIndex, index);
+    this.dataStorageService.commentPost(this.post.databaseId, this.postService.getComments(this.postIndex));
   }
 
 }

@@ -2,17 +2,13 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { PostComponent } from './post/post.component';
 import { ProfileComponent } from './profile/profile.component';
-import { ProfileDetailsComponent } from './profile/profile-details/profile-details.component';
 import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './auth/auth.guard';
 
 const appRoutes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full'},
-    { path: 'home', component: PostComponent },
-    { path: 'profile', component: ProfileComponent, 
-        children: [
-            {path: ':uid', component: ProfileDetailsComponent}
-        ] 
-    },
+    { path: 'home', component: PostComponent, canActivate: [AuthGuard]},
+    { path: 'profile/:uid', component: ProfileComponent, canActivate: [AuthGuard]},
     { path: 'auth', component: AuthComponent}
 ];
 

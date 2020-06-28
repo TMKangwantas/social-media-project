@@ -8,6 +8,7 @@ import { Comment } from '../shared/comment.model';
 import { ActivatedRoute, Router} from '@angular/router';
 import { ProfileService } from '../profile/profile.service';
 import { DataStorageService } from '../shared/data-storage.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-post',
@@ -16,11 +17,19 @@ import { DataStorageService } from '../shared/data-storage.service';
 })
 export class PostComponent implements OnInit, OnDestroy {
   subscription: Subscription;
+  userSub: Subscription;
   comment: string;
+  uid: string = '';
   feed: Post[] = [];
+  onHome: boolean;
 
-  constructor(private postService: PostService, private profileService: ProfileService, private dataStorageService: DataStorageService,
-              private route: ActivatedRoute, private router: Router) { }
+  constructor(private postService: PostService, 
+              private profileService: ProfileService, 
+              private dataStorageService: DataStorageService,
+              private authService: AuthService,
+              private route: ActivatedRoute, 
+              private router: Router
+            ) { }
 
   ngOnInit() {
     this.subscription = this.postService.postsChanged.subscribe(
@@ -28,8 +37,20 @@ export class PostComponent implements OnInit, OnDestroy {
         this.feed = feed;
       }
     );
+
+    this.userSub = this.authService.user.subscribe(
+      user => {
+        this.uid = user.id;
+      }
+    )
+
+    if (this.profileService.getProfileCount() == 0) {
+      this.dataStorageService.fetchProfiles();
+    }
+
+    this.onHome = this.route.snapshot.routeConfig.path === "home";
     
-    if (this.route.snapshot.routeConfig.path === "home") {
+    if (this.onHome) {
       this.feed = this.postService.getAllPosts();
       this.dataStorageService.fetchPosts();
     }
@@ -51,6 +72,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.userSub.unsubscribe();
   }
 
 }

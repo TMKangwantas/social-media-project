@@ -16,6 +16,7 @@ export class PostService {
     }
 
     getProfilePosts(uid: string) {
+      console.log(this.feed);
       this.postsChanged.next(this.feed.filter(p => p.uid === uid));
     }
 
@@ -37,25 +38,39 @@ export class PostService {
       }
     }
 
-    likePost(index: number) {
-        const currentPost = this.feed[index].likes;
+    likePost(postId: string, uid: string, onHomePage: boolean, currentUser: string) {
+        const currentPost = this.feed.find(p => p.databaseId === postId).likes;
 
-        if (!currentPost.includes('Erika Jay')) {      //Obviously will change later 
-            currentPost.push('Erika Jay');
+        if (currentPost.includes(uid)) {
+          currentPost.splice(currentPost.indexOf(uid), 1);
         }
         else {
-            currentPost.splice(currentPost.indexOf('Erika Jay'), 1);
+          currentPost.push(uid);
         }
-        this.postsChanged.next(this.feed.slice());
+
+        console.log(this.feed);
+
+        if (onHomePage) {
+          this.postsChanged.next(this.feed.slice());
+        }
+        else {
+          this.getProfilePosts(currentUser);
+        } 
     }
 
     closeComments() {
       this.feed.map(p => p.showComments = false);
     }
 
-    commentPost(comment: Comment, index: number) {
-        this.feed[index].comments.push(comment);
-        this.postsChanged.next(this.feed.slice());
+    commentPost(comment: Comment, postId: string, onHomePage: boolean, currentUser: string) {
+        this.feed.find(p => p.databaseId === postId).comments.push(comment);
+        
+        if (onHomePage) {
+          this.postsChanged.next(this.feed.slice());
+        }
+        else {
+          this.getProfilePosts(currentUser);
+        } 
     }
 
     deletePost(index: number) {

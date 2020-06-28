@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Post } from 'src/app/shared/post.model';
 import { PostService } from '../post.service';
 import { DataStorageService } from 'src/app/shared/data-storage.service';
+import { ActivatedRoute } from '@angular/router';
+import { ProfileService } from 'src/app/profile/profile.service';
 
 @Component({
   selector: 'app-like-post',
@@ -11,15 +13,17 @@ import { DataStorageService } from 'src/app/shared/data-storage.service';
 export class LikePostComponent implements OnInit {
   @Input() post: Post;
   @Input() index: number;
+  @Input() uid: string;
+  @Input() onHome: boolean;
 
-  constructor(private postService: PostService, private dataStorageService: DataStorageService) { }
+  constructor(private postService: PostService, private profileService: ProfileService, private dataStorageService: DataStorageService) { }
 
   ngOnInit() {
   }
 
-  onLike(index: number, databaseId: string) {
-    this.postService.likePost(index);
-    this.dataStorageService.likePost(databaseId, this.postService.getLikes(index));
+  onLike() {
+    this.postService.likePost(this.post.databaseId, this.uid, this.onHome, this.profileService.getCurrentUser());
+    this.dataStorageService.likePost(this.post.databaseId, this.postService.getLikes(this.index));
   }
 
 }

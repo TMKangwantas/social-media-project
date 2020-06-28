@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NgForm, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 
 import { PostService } from '../post.service';
 import { Post } from 'src/app/shared/post.model';
@@ -17,6 +17,7 @@ export class CreatePostComponent implements OnInit {
   addImages = false;
   createPostForm: FormGroup;
   currentUid: string;
+  @Input() uid: string;
 
   constructor( private postService: PostService, private profileService: ProfileService, private dataStorageService: DataStorageService,
                 private route: ActivatedRoute, private router: Router) { }
@@ -25,17 +26,17 @@ export class CreatePostComponent implements OnInit {
     this.initForm();
   }
 
-  onSubmit(form: NgForm) {
+  onSubmit() {
     const imagePaths = [];
 
     for (let path of this.createPostForm.value['imagePaths']) {
       imagePaths.push(path['imagePath']);
       }
-    const profile: Profile = this.profileService.getProfile(this.profileService.getCurrentUser());
+    const profile: Profile = this.profileService.getProfile(this.uid);
 
     const newPost = new Post( 
       profile.uid,
-      '',
+      profile.databaseId,
       profile.firstName,
       profile.lastName,
       this.createPostForm.value['postBody'],

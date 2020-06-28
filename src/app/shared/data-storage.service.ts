@@ -132,12 +132,14 @@ export class DataStorageService {
         ).pipe(
             tap(
                 response => {
+                    let profiles: Profile[] = [];
                     for (let key in response) {
                         const profile = response[key];
                         profile.databaseId = key;
                         profile.postIds = profile.postIds == null ? [] : profile.postIds;
-                        this.profileService.addProfile(profile);
+                        profiles.push(profile);
                     }
+                    this.profileService.setProfiles(profiles);
                 }
             )
         ).
