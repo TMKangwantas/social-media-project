@@ -11,6 +11,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   isAuthenticated = true;
   uid: string;
+  showSearchBar = false;
+
   constructor(private authService : AuthService) { }
 
   ngOnInit() {
@@ -22,6 +24,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       }
     );
+  }
+
+  onSearch() {
+    this.showSearchBar = !this.showSearchBar;
   }
 
   onLogout() {

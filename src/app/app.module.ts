@@ -18,6 +18,7 @@ import { LikePostComponent } from './post/like-post/like-post.component';
 import { CommentPostComponent } from './post/comment-post/comment-post.component';
 import { AuthService } from './auth/auth.service';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { SearchComponent } from './header/search/search.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     AuthComponent,
     LoadingSpinnerComponent,
     LikePostComponent,
-    CommentPostComponent
+    CommentPostComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

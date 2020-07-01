@@ -39,8 +39,12 @@ export class ProfileService {
     // ];
 
     getProfile(uid: string) {
-        console.log(this.profiles.find(u => u.uid === uid));
         return this.profiles.find(u => u.uid === uid);
+    }
+
+    getProfiles(name: string) {
+        return this.profiles.filter(p => p.firstName.toLowerCase().includes(name) || 
+                                            p.lastName.toLowerCase().includes(name));
     }
 
     getProfileCount() {
