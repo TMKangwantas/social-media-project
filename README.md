@@ -10,3 +10,8 @@ It functions in a similar manner to a very basic version of Facebook:
  - The difference here is that everyone is friends with one another
  
 The database that I use to support this application is Google's Firebase. 
+
+Notes: 
+ - Use `test@test.com` / `qwerqwer` for test user login. 
+ - Auto-login works, just use base URL, don't refresh to test.
+ - Still work in progress, especially the looks of the project.
