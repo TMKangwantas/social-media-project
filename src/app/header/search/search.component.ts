@@ -9,6 +9,7 @@ import { Profile } from 'src/app/profile/profile.model';
 })
 export class SearchComponent implements OnInit {
   profiles: Profile[];
+  testName: string;
   
   constructor(private profileService: ProfileService) { }
 
