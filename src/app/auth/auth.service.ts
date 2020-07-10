@@ -83,7 +83,7 @@ export class AuthService {
     logout() {
         this.user.next(null);
         this.router.navigate(['/auth']);
-        localStorage.removeItem('userData');
+        localStorage.clear();
 
         if (this.tokenExpirationTimer) {
             clearTimeout(this.tokenExpirationTimer);
@@ -131,6 +131,7 @@ export class AuthService {
         );
         this.user.next(user);
         this.autoLogout(expiresIn * 1000);
+        this.dataStorageService.fetchProfiles();
         localStorage.setItem('userData', JSON.stringify(user));
     }
 }

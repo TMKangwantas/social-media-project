@@ -20,12 +20,12 @@ export class PostService {
       this.postsChanged.next(this.feed.filter(p => p.uid === uid));
     }
 
-    getLikes(index: number) {
-      return this.feed[index].likes;
+    getLikes(postId: string) {
+      return this.feed.find(p => p.databaseId === postId).likes;
     }
 
-    getComments(index: number) {
-      return this.feed[index].comments;
+    getComments(postId: string) {
+      return this.feed.find(p => p.databaseId === postId).comments;
     }
 
     setPosts(posts: Post[], profileOnly: boolean, uid: string) {
@@ -78,7 +78,7 @@ export class PostService {
         this.postsChanged.next(this.feed.slice());
     }
 
-    deleteComment(postIndex: number, commentIndex: number) {
-        this.feed[postIndex].comments.splice(commentIndex, 1);
+    deleteComment(postId: string, commentIndex: number) {
+      this.feed.find(p => p.databaseId === postId).comments.splice(commentIndex, 1);
     }
 }

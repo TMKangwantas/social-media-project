@@ -13,6 +13,7 @@
             (click)="onDeleteComment(i)">
             X
         </button>
+        <br *ngIf="comments.uid != uid">
     </div>
     <div class="col-md col-md-offset-1">
         <p>{{comments.body}}</p>

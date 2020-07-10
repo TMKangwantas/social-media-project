@@ -47,8 +47,11 @@ export class ProfileService {
                                             p.lastName.toLowerCase().includes(name));
     }
 
-    getProfileCount() {
-        return this.profiles.length;
+    getProfileFromLocalStorage() {
+        if (this.profiles.length === 0) {
+            const profiles: Profile[] = JSON.parse(localStorage.getItem('Profiles'));
+            this.profiles = profiles;
+        }
     }
 
     setProfiles(profiles: Profile[]) {

@@ -3,8 +3,6 @@ import { Component, OnInit, OnDestroy} from '@angular/core';
 import { Post } from '../shared/post.model';
 import { PostService } from './post.service';
 import { Subscription } from 'rxjs';
-import { NgForm } from '@angular/forms';
-import { Comment } from '../shared/comment.model';
 import { ActivatedRoute, Router} from '@angular/router';
 import { ProfileService } from '../profile/profile.service';
 import { DataStorageService } from '../shared/data-storage.service';
@@ -22,6 +20,7 @@ export class PostComponent implements OnInit, OnDestroy {
   uid: string = '';
   feed: Post[] = [];
   onHome: boolean;
+  canPost: boolean = true;
 
   constructor(private postService: PostService, 
               private profileService: ProfileService, 
@@ -44,18 +43,31 @@ export class PostComponent implements OnInit, OnDestroy {
       }
     )
 
-    if (this.profileService.getProfileCount() == 0) {
-      this.dataStorageService.fetchProfiles();
-    }
+    this.profileService.getProfileFromLocalStorage();
 
     this.onHome = this.route.snapshot.routeConfig.path === "home";
     
     if (this.onHome) {
+      this.canPost = true;
       this.feed = this.postService.getAllPosts();
       this.dataStorageService.fetchPosts();
     }
     else {
+      this.dataStorageService.fetchPosts(this.profileService.getCurrentUser(), true);
       this.postService.getProfilePosts(this.profileService.getCurrentUser());
+      const userData: {
+        email: string;
+        id: string;
+        _token: string;
+        _tokenExpirationDate: string;
+      } = JSON.parse(localStorage.getItem('userData'));
+
+      if (this.profileService.getCurrentUser() == userData.id) {
+        this.canPost = true;
+      }
+      else {
+        this.canPost = false;
+      }
     }
   }
 

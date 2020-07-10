@@ -140,6 +140,7 @@ export class DataStorageService {
                         profiles.push(profile);
                     }
                     this.profileService.setProfiles(profiles);
+                    localStorage.setItem('Profiles', JSON.stringify(profiles));
                 }
             )
         ).

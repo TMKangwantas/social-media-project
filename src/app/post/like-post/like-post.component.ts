@@ -23,7 +23,7 @@ export class LikePostComponent implements OnInit {
 
   onLike() {
     this.postService.likePost(this.post.databaseId, this.uid, this.onHome, this.profileService.getCurrentUser());
-    this.dataStorageService.likePost(this.post.databaseId, this.postService.getLikes(this.index));
+    this.dataStorageService.likePost(this.post.databaseId, this.postService.getLikes(this.post.databaseId));
   }
 
 }

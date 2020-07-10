@@ -46,15 +46,13 @@ export class CommentPostComponent implements OnInit {
       form.value.comment
     )
     this.postService.commentPost(comment, this.post.databaseId, this.onHome, this.profileService.getCurrentUser());
-    this.dataStorageService.commentPost(this.post.databaseId, this.postService.getComments(this.postIndex));
+    this.dataStorageService.commentPost(this.post.databaseId, this.postService.getComments(this.post.databaseId));
     form.reset();
   }
 
   onDeleteComment(index: number) {
-    //TODO: Only allow owner of comments to delete comments,
-    //for now, allow anyone to delete comments
-    this.postService.deleteComment(this.postIndex, index);
-    this.dataStorageService.commentPost(this.post.databaseId, this.postService.getComments(this.postIndex));
+    this.postService.deleteComment(this.post.databaseId, index);
+    this.dataStorageService.commentPost(this.post.databaseId, this.postService.getComments(this.post.databaseId));
   }
 
 }
