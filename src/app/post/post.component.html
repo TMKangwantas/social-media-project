@@ -47,7 +47,8 @@
                     [post]="post"
                     [postIndex]="i"
                     [uid]="uid"
-                    [onHome]="onHome"></app-comment-post>
+                    [onHome]="onHome"
+                    (profileClick)="onProfileClickFromComment($event)"></app-comment-post>
             </div>
           </div>
       </div>

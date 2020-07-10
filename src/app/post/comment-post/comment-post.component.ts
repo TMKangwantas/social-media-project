@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Post } from 'src/app/shared/post.model';
 import { PostService } from '../post.service';
 import { ProfileService } from 'src/app/profile/profile.service';
@@ -6,7 +6,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DataStorageService } from 'src/app/shared/data-storage.service';
 import { NgForm } from '@angular/forms';
 import { Comment } from 'src/app/shared/comment.model';
-import { EventEmitter } from 'protractor';
 import { Profile } from 'src/app/profile/profile.model';
 
 @Component({
@@ -19,6 +18,7 @@ export class CommentPostComponent implements OnInit {
   @Input() postIndex: number;
   @Input() uid: string;
   @Input() onHome: boolean;
+  @Output() profileClick = new EventEmitter<string>();
 
   constructor(private postService: PostService, private profileService: ProfileService, private dataStorageService: DataStorageService,
               private router: Router, private route: ActivatedRoute) { }
@@ -27,15 +27,7 @@ export class CommentPostComponent implements OnInit {
   }
 
   onProfileClick(uid: string) {
-    this.profileService.setCurrentUser(uid);
-    this.postService.closeComments();
-    if (this.onHome) {
-      this.router.navigate(['../profile', uid], {relativeTo: this.route});
-    }
-    else {
-      this.router.navigate(['../', uid], {relativeTo: this.route});
-    }
-    this.postService.getProfilePosts(this.profileService.getCurrentUser());
+    this.profileClick.emit(uid);
   }
 
   onComment(form: NgForm) {

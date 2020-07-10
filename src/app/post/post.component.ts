@@ -74,8 +74,23 @@ export class PostComponent implements OnInit, OnDestroy {
   onProfileClick(uid: string) {
     this.profileService.setCurrentUser(uid);
     this.postService.closeComments();
-    this.router.navigate(['../profile', uid], {relativeTo: this.route});
+    if (this.onHome) {
+      this.router.navigate(['../profile', uid], {relativeTo: this.route});
+    }
+    else {
+      if (this.uid === uid) {
+        this.canPost = true;
+      }
+      else {
+        this.canPost = false;
+      }
+      this.router.navigate(['../', uid], {relativeTo: this.route});
+    }
     this.postService.getProfilePosts(this.profileService.getCurrentUser());
+  }
+
+  onProfileClickFromComment(uid: string) {
+    this.onProfileClick(uid);
   }
 
   onShowComments(index: number) {
