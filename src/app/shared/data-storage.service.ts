@@ -96,15 +96,15 @@ export class DataStorageService {
         )
     }
 
-    // deleteComment(postId: string, commentIndex: number) {
-    //     this.http.delete(
-    //         'https://social-media-project-b27ab.firebaseio.com/posts/' + postId + '/comments/' + commentIndex + '.json' 
-    //     ).subscribe(
-    //         response => {
-    //             console.log(response);
-    //         }
-    //     )
-    // }
+    deletePost(postId: string) {
+        this.http.delete(
+            'https://social-media-project-b27ab.firebaseio.com/posts/' + postId + '.json' 
+        ).subscribe(
+            response => {
+                console.log(response);
+            }
+        )
+    }
 
     createProfile(profile: Profile) {
         this.http.post(

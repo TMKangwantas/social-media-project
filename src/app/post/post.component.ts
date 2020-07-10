@@ -82,6 +82,11 @@ export class PostComponent implements OnInit, OnDestroy {
     this.feed[index].showComments = !this.feed[index].showComments;
   }
 
+  onDeletePost(postId: string) {
+    this.postService.deletePost(postId, this.onHome, this.profileService.getCurrentUser());
+    this.dataStorageService.deletePost(postId);
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
     this.userSub.unsubscribe();

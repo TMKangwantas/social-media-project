@@ -29,7 +29,12 @@ export class CommentPostComponent implements OnInit {
   onProfileClick(uid: string) {
     this.profileService.setCurrentUser(uid);
     this.postService.closeComments();
-    this.router.navigate(['../profile', uid], {relativeTo: this.route});
+    if (this.onHome) {
+      this.router.navigate(['../profile', uid], {relativeTo: this.route});
+    }
+    else {
+      this.router.navigate(['../', uid], {relativeTo: this.route});
+    }
     this.postService.getProfilePosts(this.profileService.getCurrentUser());
   }
 

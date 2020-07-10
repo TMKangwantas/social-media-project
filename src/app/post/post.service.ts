@@ -2,21 +2,19 @@ import { Post } from '../shared/post.model';
 import { Comment } from '../shared/comment.model';
 import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { ProfileService } from '../profile/profile.service';
 
 @Injectable()
 export class PostService {
     postsChanged = new Subject<Post[]>();
     private feed: Post[] = [];
 
-    constructor(private profileService: ProfileService) {}
+    constructor() {}
 
     getAllPosts() {
       return this.feed;
     }
 
     getProfilePosts(uid: string) {
-      console.log(this.feed);
       this.postsChanged.next(this.feed.filter(p => p.uid === uid));
     }
 
@@ -48,8 +46,6 @@ export class PostService {
           currentPost.push(uid);
         }
 
-        console.log(this.feed);
-
         if (onHomePage) {
           this.postsChanged.next(this.feed.slice());
         }
@@ -73,9 +69,15 @@ export class PostService {
         } 
     }
 
-    deletePost(index: number) {
-        delete this.feed[index];
-        this.postsChanged.next(this.feed.slice());
+    deletePost(postId: string, onHomePage: boolean, currentUser: string) {
+        this.feed = this.feed.filter(p => p.databaseId != postId);
+
+        if (onHomePage) {
+          this.postsChanged.next(this.feed.slice());
+        }
+        else {
+          this.getProfilePosts(currentUser);
+        }
     }
 
     deleteComment(postId: string, commentIndex: number) {

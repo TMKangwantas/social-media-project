@@ -13,6 +13,15 @@
             <div class="col-xs-6">
                 <a style="cursor: pointer;" (click)="onProfileClick(post.uid)">{{post.firstName}} {{post.lastName}}</a>
             </div>
+            <div class="col-xs-6" >
+                <a 
+                    *ngIf="post.uid === uid" 
+                    style="cursor: pointer;" 
+                    (click)="onDeletePost(post.databaseId)">
+                        Delete Post
+                </a>
+                <br *ngIf="post.uid != uid">
+            </div>
             <p>{{post.body}}</p>
             <div class="row" *ngIf="post.imagePaths.length !== 0">
                 <div 

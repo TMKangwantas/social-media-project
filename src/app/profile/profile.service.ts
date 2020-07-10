@@ -62,10 +62,6 @@ export class ProfileService {
         return this.profiles.find(u => u.uid === uid).uid;
     }
 
-    getProfilePosts(uid: string) {
-        return this.profiles.find(u => u.uid === uid).postIds;
-    }
-
     setCurrentUser(uid: string) {
         this.currentUid = uid;
     }
