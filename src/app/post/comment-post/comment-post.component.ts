@@ -11,7 +11,7 @@ import { Profile } from 'src/app/profile/profile.model';
 @Component({
   selector: 'app-comment-post',
   templateUrl: './comment-post.component.html',
-  styleUrls: ['./comment-post.component.css']
+  styleUrls: ['./comment-post.component.scss']
 })
 export class CommentPostComponent implements OnInit {
   @Input() post: Post;

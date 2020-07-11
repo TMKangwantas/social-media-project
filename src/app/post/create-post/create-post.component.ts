@@ -11,7 +11,7 @@ import { DataStorageService } from 'src/app/shared/data-storage.service';
 @Component({
   selector: 'app-create-post',
   templateUrl: './create-post.component.html',
-  styleUrls: ['./create-post.component.css']
+  styleUrls: ['./create-post.component.scss']
 })
 export class CreatePostComponent implements OnInit {
   addImages = false;

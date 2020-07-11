@@ -2,13 +2,12 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Post } from 'src/app/shared/post.model';
 import { PostService } from '../post.service';
 import { DataStorageService } from 'src/app/shared/data-storage.service';
-import { ActivatedRoute } from '@angular/router';
 import { ProfileService } from 'src/app/profile/profile.service';
 
 @Component({
   selector: 'app-like-post',
   templateUrl: './like-post.component.html',
-  styleUrls: ['./like-post.component.css']
+  styleUrls: ['./like-post.component.scss']
 })
 export class LikePostComponent implements OnInit {
   @Input() post: Post;
